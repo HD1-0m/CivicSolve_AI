@@ -1,0 +1,147 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile containing identity, role, and stakeholder affiliation.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["citizen", "student", "university", "industry", "ngo", "expert", "admin"] },
+        "organization": { "type": "string" },
+        "location": { "type": "string" },
+        "skills": { "type": "array" },
+        "interests": { "type": "array" },
+        "expertise": { "type": "array" },
+        "reputationScore": { "type": "number" },
+        "challengesSubmittedCount": { "type": "number" },
+        "solutionsProposedCount": { "type": "number" },
+        "projectsJoinedCount": { "type": "number" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "role", "email"]
+    },
+    "Challenge": {
+      "title": "Challenge",
+      "description": "A crowdsourced societal challenge submitted by a citizen, community, or NGO.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string", "minLength": 5, "maxLength": 300 },
+        "description": { "type": "string", "minLength": 10, "maxLength": 5000 },
+        "category": { "type": "string" },
+        "location": { "type": "object" },
+        "targetCommunity": { "type": "string" },
+        "affectedCount": { "type": "number" },
+        "urgency": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "creatorId": { "type": "string" },
+        "creatorName": { "type": "string" },
+        "creatorRole": { "type": "string" },
+        "creatorOrg": { "type": "string" },
+        "status": { "type": "string", "enum": ["submitted", "analyzed", "in-review", "open-for-solutions", "in-progress", "pilot-testing", "resolved"] },
+        "supportCount": { "type": "number" },
+        "solutionCount": { "type": "number" },
+        "projectCount": { "type": "number" },
+        "supporters": { "type": "array" },
+        "savedBy": { "type": "array" },
+        "aiAnalysis": { "type": "object" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "title", "description", "category", "creatorId", "status"]
+    },
+    "Solution": {
+      "title": "Solution",
+      "description": "An academic or industry proposed solution addressing a specific challenge.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "challengeId": { "type": "string" },
+        "title": { "type": "string", "minLength": 5, "maxLength": 300 },
+        "summary": { "type": "string", "minLength": 10, "maxLength": 5000 },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorOrg": { "type": "string" },
+        "authorRole": { "type": "string" },
+        "stage": { "type": "string", "enum": ["concept", "research", "prototype", "pilot-ready", "field-tested"] },
+        "technicalApproach": { "type": "string" },
+        "estimatedCost": { "type": "string" },
+        "timelineMonths": { "type": "number" },
+        "votesCount": { "type": "number" },
+        "votedBy": { "type": "array" },
+        "aiEvaluation": { "type": "object" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "challengeId", "title", "summary", "authorId"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "A collaborative execution workspace uniting students, faculty, and industry sponsors.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "challengeId": { "type": "string" },
+        "solutionId": { "type": "string" },
+        "leadOrganization": { "type": "string" },
+        "leadContact": { "type": "string" },
+        "teamMembers": { "type": "array" },
+        "status": { "type": "string", "enum": ["planning", "active", "review", "completed"] },
+        "progress": { "type": "number" },
+        "tasks": { "type": "array" },
+        "milestones": { "type": "array" },
+        "fundingAllocated": { "type": "number" },
+        "fundingDisbursed": { "type": "number" },
+        "sponsor": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "title", "challengeId", "status"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "Stakeholder discussion comment on a challenge or solution.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "challengeId": { "type": "string" },
+        "solutionId": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorOrg": { "type": "string" },
+        "authorRole": { "type": "string" },
+        "content": { "type": "string", "minLength": 1, "maxLength": 3000 },
+        "type": { "type": "string", "enum": ["general", "feasibility", "community-feedback", "academic-review"] },
+        "likesCount": { "type": "number" },
+        "likedBy": { "type": "array" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "challengeId", "authorId", "content"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Stores user profiles with isolated personal access."
+    },
+    "/challenges/{challengeId}": {
+      "schema": "Challenge",
+      "description": "Stores crowdsourced community societal challenges."
+    },
+    "/solutions/{solutionId}": {
+      "schema": "Solution",
+      "description": "Stores proposed solutions for challenges."
+    },
+    "/projects/{projectId}": {
+      "schema": "Project",
+      "description": "Stores collaborative execution workspaces."
+    },
+    "/comments/{commentId}": {
+      "schema": "Comment",
+      "description": "Stores stakeholder discussion messages."
+    }
+  }
+}

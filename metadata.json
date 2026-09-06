@@ -1,0 +1,6 @@
+{
+  "name": "CivicSolve AI",
+  "description": "A digital platform crowdsourcing societal challenges and facilitating collaborative problem-solving through university and industry partnerships, powered by Gemini AI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
